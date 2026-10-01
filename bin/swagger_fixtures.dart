@@ -9,7 +9,7 @@ import 'package:yaml/yaml.dart';
 /// ```yaml
 /// # pubspec.yaml
 /// swagger_fixtures:
-///   swagger_url: https://api.example.com/swagger.json  # or a list of them; a local path works too
+///   swagger_url: https://api.example.com/swagger.json  # JSON or YAML; or a list; a local path works too
 ///   json_output_dir: test/fixtures                     # default
 ///   dart_output_file: test/fixtures/fixtures.g.dart      # default <json_output_dir>/fixtures.g.dart
 /// ```
@@ -36,7 +36,7 @@ Future<void> main() async {
 
   final all = <Response>[];
   for (final url in urls) {
-    final spec = jsonDecode(await _read(url)) as Map<String, dynamic>;
+    final spec = parseSpec(await _read(url));
     all.addAll(responses(spec));
   }
 

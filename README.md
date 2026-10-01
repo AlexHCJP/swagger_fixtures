@@ -66,7 +66,7 @@ Or manually in `pubspec.yaml`:
 
 ```yaml
 dev_dependencies:
-  swagger_fixtures: ^0.1.0
+  swagger_fixtures: ^0.2.0
 ```
 
 ### Globally
@@ -83,7 +83,7 @@ Add a `swagger_fixtures:` section to the same `pubspec.yaml`:
 
 ```yaml
 swagger_fixtures:
-  # Required. One spec, or a list of them. A local file path works too.
+  # Required. One spec, or a list of them, JSON or YAML. A local file path works too.
   swagger_url:
     - https://api.example.com/auth/swagger/doc.json
     - https://api.example.com/billing/swagger/doc.json
@@ -176,7 +176,6 @@ real responses.
 
 ## ⚠️ Limitations
 
-- JSON specs only (not YAML).
 - Local `$ref`s only (`#/...`).
 - Fixtures are read with `dart:io`, so they work in VM tests (`dart test`,
   `flutter test`), not in browser tests.

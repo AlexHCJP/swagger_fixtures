@@ -79,4 +79,23 @@ void main() {
     expect(isFixtureFile('my_data.json'), isFalse);
     expect(isFixtureFile('get_v1_me_200.dart'), isFalse);
   });
+
+  test('parseSpec reads YAML with int status codes as JSON would', () {
+    const yaml = '''
+swagger: "2.0"
+paths:
+  /v1/me:
+    get:
+      responses:
+        200:
+          schema:
+            type: object
+            properties:
+              name: {type: string, example: Ann}
+''';
+    final all = responses(parseSpec(yaml));
+    expect(all.single.name, 'getV1Me200');
+    expect(all.single.body, {'name': 'Ann'});
+    expect(parseSpec('{"paths": {}}'), {'paths': <String, dynamic>{}});
+  });
 }

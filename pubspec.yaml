@@ -1,6 +1,6 @@
 name: swagger_fixtures
 description: Test fixtures from a Swagger/OpenAPI spec — one JSON file per documented response, built from its examples, plus a Dart file that names and parses them.
-version: 0.1.0
+version: 0.2.0
 
 homepage: https://github.com/AlexHCJP/swagger_fixtures
 repository: https://github.com/AlexHCJP/swagger_fixtures

@@ -1,19 +1,24 @@
-# .github/workflows/publish.yml
 name: Publish to pub.dev
 
+# Push a tag equal to the pubspec version — `git tag 0.1.0 && git push origin 0.1.0`.
+# pub.dev checks the tag against the version itself and refuses a mismatch.
 on:
   push:
     tags:
       - '[0-9]+.[0-9]+.[0-9]+'
       - '[0-9]+.[0-9]+.[0-9]+-dev'
 
-# Publish using the reusable workflow from dart-lang.
 jobs:
+  checks:
+    uses: ./.github/workflows/checkout.yml
+
+  # Using the reusable workflow from dart-lang.
   publish:
+    needs: checks
     permissions:
       id-token: write # Required for authentication using OIDC
     uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
     with:
-      # Specify the github actions deployment environment
+      # Must match "Require GitHub Actions environment" on the package's
+      # pub.dev admin page.
       environment: pub.dev
-      

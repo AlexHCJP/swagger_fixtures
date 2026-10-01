@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:yaml/yaml.dart';
+
 const _methods = {'get', 'put', 'post', 'delete', 'patch', 'head', 'options'};
 
 /// One documented response with a JSON body.
@@ -14,6 +18,25 @@ class Response {
   /// The JSON body, already decoded.
   final Object? body;
 }
+
+/// A spec's text, JSON or YAML, as plain Dart maps and lists.
+///
+/// YAML reads `200:` as an int, so map keys are turned back into strings.
+Map<String, dynamic> parseSpec(String text) {
+  try {
+    return jsonDecode(text) as Map<String, dynamic>;
+  } on FormatException {
+    return _plain(loadYaml(text)) as Map<String, dynamic>;
+  }
+}
+
+Object? _plain(Object? node) => switch (node) {
+  final Map<Object?, Object?> m => <String, dynamic>{
+    for (final MapEntry(:key, :value) in m.entries) '$key': _plain(value),
+  },
+  final List<Object?> l => l.map(_plain).toList(),
+  _ => node,
+};
 
 /// Every response in a Swagger 2.0 or OpenAPI 3 [spec] that has a body.
 List<Response> responses(Map<String, dynamic> spec) {

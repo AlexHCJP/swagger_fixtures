@@ -1,20 +1,12 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 name: Dart
 
 on:
   pull_request:
     branches: [ "main" ]
-    paths:
-      - 'lib/**'
-      - '.github/**'
   push:
     branches: [ "main" ]
-    paths:
-      - '.github/**'
+  # publish.yml runs the same checks before it publishes.
+  workflow_call:
 
 jobs:
   checkout:
@@ -24,23 +16,21 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: 3.44.0
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
 
       - name: Install dependencies
-        run: flutter pub get
+        run: dart pub get
 
-      - name: Run tests with coverage
-        run: flutter test --coverage
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed -l 80 .
 
       - name: Analyze project source
-        run: flutter analyze --fatal-infos --fatal-warnings lib/ bin/ test/
+        run: dart analyze --fatal-infos --fatal-warnings
 
+      - name: Run tests
+        run: dart test
+
+      # The validation pub.dev runs on upload; fails on any warning.
+      - name: Publish dry run
+        run: dart pub publish --dry-run
