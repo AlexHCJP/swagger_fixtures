@@ -1,0 +1,30 @@
+name: swagger_fixtures
+description: Test fixtures from a Swagger/OpenAPI spec — one JSON file per documented response, built from its examples, plus a Dart file that names and parses them.
+version: 0.1.0
+
+homepage: https://github.com/AlexHCJP/swagger_fixtures
+repository: https://github.com/AlexHCJP/swagger_fixtures
+issue_tracker: https://github.com/AlexHCJP/swagger_fixtures/issues
+
+topics:
+  - testing
+  - openapi
+  - swagger
+  - fixtures
+  - codegen
+
+environment:
+  sdk: ^3.7.0
+
+# `dart run swagger_fixtures` in a package that depends on this one, or
+# `dart pub global activate swagger_fixtures` to have it on PATH.
+executables:
+  swagger_fixtures:
+
+dependencies:
+  # Reading the `swagger_fixtures:` section out of the consumer's pubspec.yaml.
+  yaml: ^3.1.3
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.0
