@@ -39,6 +39,14 @@ Future<void> main() async {
     final spec = parseSpec(await _read(url));
     all.addAll(responses(spec));
   }
+  // An error page served as 200 parses to zero responses; wiping the old
+  // fixtures for it would leave nothing to test against.
+  if (all.isEmpty) {
+    stderr.writeln(
+      'swagger_fixtures: no responses found in $urls, nothing changed.',
+    );
+    exit(65);
+  }
 
   final dir = Directory(jsonOutputDir);
   // Stale fixtures go with the endpoints that dropped out of the spec. Only
